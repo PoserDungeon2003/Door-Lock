@@ -1,8 +1,8 @@
 
-// Include the LCD_I2C library
-#include <LiquidCrystal_I2C.h>
-#include <Keypad.h>
-#include <EEPROM.h>
+
+#include <LiquidCrystal_I2C.h> // Include the LCD_I2C library for LCD screen
+#include <Keypad.h> // Include the Keypad library for keypad
+#include <EEPROM.h> // Include the EEPROM library for accessing ROM
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
@@ -36,33 +36,32 @@ void setup() {
   // Setup serial monitor
 
   Serial.begin(9600);
-  pinMode(lock, OUTPUT);
+  pinMode(lock, OUTPUT); // set the lock output
   lcd.init();
   lcd.backlight();
 
-  digitalWrite(lock, LOW);
+  digitalWrite(lock, LOW); //default the lock will be locked
   lcd.setCursor(3, 0);
-  lcd.print("Welcome");
+  lcd.print("WELCOME"); //Welcome screen
   delay(2000);
   lcd.clear();
-  del("INPUT PIN: ");
+  del("INPUT PIN: "); //input PIN code
 
-  pass = getPIN(0);
+  pass = getPIN(0); // get PIN from ROM
 }
 
 void loop() {
   // Get key value if pressed
-  char customKey = customKeypad.getKey();
+  char customKey = customKeypad.getKey(); //get input from keypad
   if (customKey) {
-    // Print key value to serial monitor
     lcd.setCursor(n, 1);
-    lcd.print(customKey);
-    input.concat(customKey);
+    lcd.print(customKey); //print all the desired output to screen
+    input.concat(customKey); //passing parameter from "customKey" value to "input" value
     n++;
   }
 
   switch (customKey) {
-    case 'A':
+    case 'A': //Enter button
       switch (check){
         case 0:
           if(input==pass){
@@ -94,12 +93,12 @@ void loop() {
       }
       break;
 
-    case 'B':
+    case 'B': // Change PIN
       del("OLD PIN:");
       check = 1;
       break;
 
-    case 'C':
+    case 'C': //Clear the screen
       digitalWrite(lock, LOW);
       switch (check){
         case 0:
@@ -113,7 +112,7 @@ void loop() {
           break;
       }
       break;
-      case '#':
+      case '#': //show pass value on Serial Plotter that was saved in ROM
         
         Serial.println(pass);
   }
