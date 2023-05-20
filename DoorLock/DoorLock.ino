@@ -27,10 +27,10 @@ Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS)
 
 int n = 0;
 
-const int lock = 10;
-String input = "";
-String pass = "";
-int check = 0;
+const int lock = 10; //lock signal
+String input = ""; //user input
+String pass = ""; //to store password
+int check = 0; // flag
 
 void setup() {
   // Setup serial monitor
