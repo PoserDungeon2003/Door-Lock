@@ -61,14 +61,18 @@ void loop() {
   }
 
   switch (customKey) {
-    case 'A': //Enter button
+    case 'A': //Enter pass mode button
       switch (check){
+        //check = 0; ==> default mode (Enter PIN for authorization)
+        //check = 1; ==> Enter old PIN (For change pass mode)
+        //check = 2; ==> Enter new PIN (FOr change pass mode)
         case 0:
           if(input==pass){
             del("OK");
             digitalWrite(lock, HIGH);
-            delay(10000);
+            delay(2000);
             digitalWrite(lock, LOW);
+            del("INPUT PIN:");
           }
           else{
             center("TRY AGAIN");
@@ -93,7 +97,7 @@ void loop() {
       }
       break;
 
-    case 'B': // Change PIN
+    case 'B': // Change PIN mode
       del("OLD PIN:");
       check = 1;
       break;
@@ -112,34 +116,38 @@ void loop() {
           break;
       }
       break;
-      case '#': //show pass value on Serial Plotter that was saved in ROM
+      case 'D':
+        del("INPUT PIN:");
+        break;
+      case '#': //show PIN value on Serial Plotter that was saved in ROM
         
         Serial.println(pass);
+        break;
   }
 }
 
-void del(String text) {
+void del(String text) { //function to clear and set cursor to the right position
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print(text);
   input = "";
   n = 0;
 }
-void center(String text) {
+void center(String text) { //function to clear and set cursor to center
   lcd.clear();
-  lcd.setCursor(3, 0);
+  lcd.setCursor(4, 0);
   lcd.print(text);
   input = "";
   n = 0;
 }
-void storePIN(int addr, String pass){
+void storePIN(int addr, String pass){ //store PIN into EEPROM
   byte l = pass.length();
   EEPROM.write(addr,l);
   for(int i=0; i<l; i++){
     EEPROM.write(addr+i+1, pass[i]);
   }
 }
-String getPIN(int addr){
+String getPIN(int addr){ //get PIN from EEPROM
   int l1 = EEPROM.read(addr);
   char code[l1+1];
   for(int i=0; i<l1; i++){
